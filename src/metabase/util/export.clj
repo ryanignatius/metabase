@@ -1,5 +1,6 @@
 (ns metabase.util.export
   (:require [cheshire.core :as json]
+            [clj-pdf.core :as pdf]
             [clojure.data.csv :as csv]
             [dk.ative.docjure.spreadsheet :as spreadsheet])
   (:import [java.io ByteArrayInputStream ByteArrayOutputStream File]
@@ -54,6 +55,56 @@
   (for [row rows]
     (zipmap column-names row)))
 
+(defn- pdf-table-seq
+  "Helper method to write the dataset"
+  [rows]
+  (into
+    [:pdf-table
+      {:width-percent 100
+        :color [114 116 121]
+        :border-color [213 213 213]
+      }
+      nil
+    ]
+    (mapv (fn [row] (vec (map (fn [element] [:pdf-cell (str element) ]) row ) ) ) rows)
+  ))
+
+(defn- export-to-pdf
+  "Write a PDF to stream with the content in rows vector of sequences"
+  [columns rows]
+  (let [output-stream (ByteArrayOutputStream.)]
+    (pdf/pdf [
+      {:size :a4
+       :orientation :landscape
+       :left-margin   10
+       :right-margin  10
+       :top-margin    15
+       :bottom-margin 15
+       :font {
+          :size 9
+          :family :sans-serif}}
+      ; write the title
+      [:heading {:align :center} "Results"]
+      [:spacer 1]
+
+      ; write the header row
+      (into
+        [:pdf-table
+          {:width-percent 100
+           :border-color [213 213 213]
+           :background-color [56 117 172]
+          }
+          nil
+        ]
+        [(mapv (fn [name] [:pdf-cell {:align :center :valign :middle :height 25 :font {:style :bold }} name]) columns)])
+
+      ; write the contents
+      (pdf-table-seq rows)]
+      output-stream)
+
+    ; write the stream
+    (ByteArrayInputStream. (.toByteArray output-stream))))
+
 ;; TODO - we should rewrite this whole thing as 4 multimethods. Then it would be possible to add new export types via
 ;; plugins, etc.
 (def export-formats
@@ -66,6 +117,10 @@
            :content-type "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
            :ext          "xlsx"
            :context      :xlsx-download},
+   "pdf"  {:export-fn    export-to-pdf
+           :content-type "application/pdf"
+           :ext          "pdf"
+           :context      :pdf-download},
    "json" {:export-fn    export-to-json
            :content-type "applicaton/json"
            :ext          "json"

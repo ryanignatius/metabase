@@ -1196,7 +1196,7 @@ Like `GET /api/embed/card/query`, but returns the results as a file in the speci
 
 *  **`token`** 
 
-*  **`export-format`** value must be one of: `csv`, `json`, `xlsx`.
+*  **`export-format`** value must be one of: `csv`, `json`, `xlsx`, `pdf`.
 
 *  **`query-params`** 
 
@@ -1245,7 +1245,7 @@ Fetch the results of running a Card belonging to a Dashboard using a JSON Web To
 
 *  **`token`** 
 
-*  **`export-format`** value must be one of: `csv`, `json`, `xlsx`.
+*  **`export-format`** value must be one of: `csv`, `json`, `xlsx`, `pdf`.
 
 *  **`dashcard-id`** 
 

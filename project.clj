@@ -63,6 +63,7 @@
     :exclusions [commons-codec
                  commons-io
                  slingshot]]
+   [clj-pdf "2.4.0"]                                                  ; for pdf generation / export
    [clj-time "0.15.1"]                                                ; library for dealing with date/time
    [clojurewerkz/quartzite "2.1.0"                                    ; scheduling library
     :exclusions [c3p0]]
@@ -107,7 +108,7 @@
    [me.raynes/fs "1.4.6"]                                   ; FS tools
    [medley "1.2.0"]                                                   ; lightweight lib of useful functions
    [metabase/connection-pool "1.0.2"]                                 ; simple wrapper around C3P0. JDBC connection pools
-   [metabase/mbql "1.3.6"]                                            ; MBQL language schema & util fns
+;;   [metabase/mbql "1.3.6"]                                            ; MBQL language schema & util fns
    [metabase/throttle "1.0.2"]                                        ; Tools for throttling access to API endpoints and other code pathways
    [methodical "0.9.4-alpha"]
    [net.sf.cssbox/cssbox "4.12" :exclusions [org.slf4j/slf4j-api]]    ; HTML / CSS rendering
@@ -134,6 +135,9 @@
    [toucan "1.14.0" :exclusions [org.clojure/java.jdbc honeysql]]     ; Model layer, hydration, and DB utilities
    [weavejester/dependency "0.2.1"]                                   ; Dependency graphs and topological sorting
    ]
+
+  :plugins [[lein-git-deps "0.0.2-SNAPSHOT"]]
+  :git-dependencies [["https://github.com/ryanignatius/mbql.git"]]
 
   :main ^:skip-aot metabase.core
 
