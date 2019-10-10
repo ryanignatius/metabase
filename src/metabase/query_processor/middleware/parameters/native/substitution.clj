@@ -7,6 +7,10 @@
      ;; ; any prepared statement args (values for `?` placeholders) needed for the replacement snippet
      :prepared-statement-args [#inst \"2017-01-01\"]}"
   (:require [clojure.string :as str]
+            [clj-time
+             [coerce :as coerce]
+             [core :as t]
+             [format :as f]]
             [honeysql.core :as hsql]
             [metabase.driver :as driver]
             [metabase.driver.sql :as sql]
@@ -80,9 +84,16 @@
     {:replacement-snippet     (str/join ", " (map :replacement-snippet values))
      :prepared-statement-args (apply concat (map :prepared-statement-args values))}))
 
+(defn end-plus-one
+  "End plus one day"
+  [end-date-string]
+  (f/unparse (f/formatter "yyyy-MM-dd") (t/plus (coerce/from-string end-date-string) (t/days 1))))
+
 (defmethod ->replacement-snippet-info Date
   [{:keys [s]}]
-  (create-replacement-snippet (du/->Timestamp s)))
+    (let [params (map (comp #(sql/->prepared-substitution driver/*driver* %) du/->Timestamp) [s (end-plus-one s)])]
+      {:replacement-snippet     (apply format "BETWEEN %s AND %s" (map :sql-string params)),
+       :prepared-statement-args (vec (mapcat :param-values params))}))
 
 (defn- prepared-ts-subs [operator date-str]
   (let [{:keys [sql-string param-values]} (sql/->prepared-substitution driver/*driver* (du/->Timestamp date-str))]
@@ -92,17 +103,14 @@
 (defmethod ->replacement-snippet-info DateRange
   [{:keys [start end]}]
   (cond
-    (= start end)
-    (prepared-ts-subs \= start)
-
     (nil? start)
-    (prepared-ts-subs \< end)
+    (prepared-ts-subs \< (end-plus-one end))
 
     (nil? end)
     (prepared-ts-subs \> start)
 
     :else
-    (let [params (map (comp #(sql/->prepared-substitution driver/*driver* %) du/->Timestamp) [start end])]
+    (let [params (map (comp #(sql/->prepared-substitution driver/*driver* %) du/->Timestamp) [start (end-plus-one end)])]
       {:replacement-snippet     (apply format "BETWEEN %s AND %s" (map :sql-string params)),
        :prepared-statement-args (vec (mapcat :param-values params))})))
 
