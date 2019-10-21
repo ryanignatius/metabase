@@ -181,7 +181,7 @@ export default class TableSimple extends Component {
                         <td
                           key={columnIndex}
                           style={{
-                            whiteSpace: "nowrap",
+                            whiteSpace: "pre-wrap",
                             backgroundColor:
                               getCellBackgroundColor &&
                               getCellBackgroundColor(
