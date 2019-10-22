@@ -615,6 +615,16 @@
     (api/check-not-archived card)
     (qp.async/process-query-and-save-execution! query options)))
 
+(defn get-card-name
+  "Return card name of card"
+  [{card-name :name, :as card}]
+  card-name)
+
+(defn get-card
+  "Return card from card id"
+  [card-id]
+  (api/read-check (Card (Integer/parseUnsignedInt card-id))))
+
 (api/defendpoint POST "/:card-id/query"
   "Run the query associated with a Card."
   [card-id :as {{:keys [parameters ignore_cache], :or {ignore_cache false}} :body}]
@@ -629,7 +639,7 @@
   {parameters    (s/maybe su/JSONString)
    export-format dataset-api/ExportFormat}
   (binding [cache/*ignore-cached-results* true]
-    (dataset-api/as-format-async export-format respond raise
+    (dataset-api/as-format-async export-format (get-card-name (get-card card-id)) respond raise
       (run-query-for-card-async (Integer/parseUnsignedInt card-id)
         :parameters  (json/parse-string parameters keyword)
         :constraints nil
