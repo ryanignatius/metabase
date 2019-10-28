@@ -153,7 +153,7 @@
 
 
 (defmethod unprepare/unprepare-value [:postgres Date] [_ value]
-  (format "'%s'::timestamp" (du/date->iso-8601 value)))
+  (format "'%s'::date" (du/date->iso-8601 value)))
 
 (prefer-method unprepare/unprepare-value [:sql Time] [:postgres Date])
 
