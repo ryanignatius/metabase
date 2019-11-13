@@ -336,6 +336,19 @@
 
 ;;; ---------------------------------------- PERMISSIONS CHECKING HELPER FNS -----------------------------------------
 
+(defn read-without-check
+  "Check whether we can read an existing OBJ, or ENTITY with ID.
+   If the object doesn't exist, throw a 404.
+   This will fetch the object if it was not already fetched, and returns OBJ if the check is successful."
+  {:style/indent 2}
+  ([obj]
+   (check-404 obj)
+   obj)
+  ([entity id]
+   (read-without-check (entity id)))
+  ([entity id & other-conditions]
+   (read-without-check (apply db/select-one entity :id id other-conditions))))
+
 (defn read-check
   "Check whether we can read an existing OBJ, or ENTITY with ID.
    If the object doesn't exist, throw a 404; if we don't have proper permissions, throw a 403.

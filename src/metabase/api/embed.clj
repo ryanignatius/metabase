@@ -434,6 +434,15 @@
     (check-embedding-enabled-for-dashboard dashboard-id)
     (public-api/dashboard-field-remapped-values dashboard-id field-id remapped-id value)))
 
+(defn get-card-name
+  "Return card name of card"
+  [{card-name :name, :as card}]
+  card-name)
+
+(defn get-card
+  "Return card from card id"
+  [card-id]
+  (api/read-without-check (Card (Integer/parseUnsignedInt card-id))))
 
 (api/defendpoint-async GET ["/dashboard/:token/dashcard/:dashcard-id/card/:card-id/:export-format"
                             :export-format dataset-api/export-format-regex]
@@ -441,7 +450,7 @@
   `embedding-secret-key` return the data in one of the export formats"
   [{{:keys [token export-format dashcard-id card-id]} :params, :keys [query-params]} respond raise]
   {export-format dataset-api/ExportFormat}
-  (dataset-api/as-format-async export-format respond raise
+  (dataset-api/as-format-async export-format (get-card-name (get-card card-id)) respond raise
     (card-for-signed-token-async token
       (Integer/parseUnsignedInt dashcard-id)
       (Integer/parseUnsignedInt card-id)
