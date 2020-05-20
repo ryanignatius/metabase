@@ -112,7 +112,7 @@
                  (maybe-modify-date-values cols rows))
        :headers {"Content-Type"        (str (:content-type export-conf) "; charset=utf-8")
                  "Content-Disposition" (format "attachment; filename=\"%s_%s.%s\""
-                                               card-name (du/date->iso-8601) (:ext export-conf))}}
+                                               card-name (du/date->date-format) (:ext export-conf))}}
       ;; failed query, send error message
       {:status 500
        :body   (:error response)})))

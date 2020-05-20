@@ -66,7 +66,7 @@
       }
       nil
     ]
-    (mapv (fn [row] (vec (map (fn [element] [:pdf-cell (str element) ]) row ) ) ) rows)
+    (mapv (fn [row] (vec (map (fn [element] [:pdf-cell {:padding-bottom 10} (str element) ]) row ) ) ) rows)
   ))
 
 (defn- export-to-pdf
@@ -74,7 +74,7 @@
   [columns rows]
   (let [output-stream (ByteArrayOutputStream.)]
     (pdf/pdf [
-      {:size :a4
+      {:size :a2
        :orientation :landscape
        :left-margin   10
        :right-margin  10
@@ -83,20 +83,16 @@
        :font {
           :size 9
           :family :sans-serif}}
-      ; write the title
-      [:heading {:align :center} "Results"]
-      [:spacer 1]
-
       ; write the header row
       (into
         [:pdf-table
           {:width-percent 100
            :border-color [213 213 213]
-           :background-color [56 117 172]
+           :background-color [58 164 255]
           }
           nil
         ]
-        [(mapv (fn [name] [:pdf-cell {:align :center :valign :middle :height 25 :font {:style :bold }} name]) columns)])
+        [(mapv (fn [name] [:pdf-cell {:align :center :valign :middle :padding-bottom 10} name]) columns)])
 
       ; write the contents
       (pdf-table-seq rows)]

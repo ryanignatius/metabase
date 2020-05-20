@@ -236,6 +236,10 @@
   "Format `date` a an ISO-8601 string."
   (partial format-date :date-time))
 
+(def ^{:arglists '([] [date])} date->date-format
+  "Format `date` a yyyy-MM-dd string."
+  (partial format-date "yyyy-MM-dd"))
+
 (defn date-string?
   "Is S a valid ISO 8601 date string?"
   [^String s]
