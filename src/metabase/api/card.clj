@@ -596,6 +596,11 @@
                     (query-magic-ttl query)))]
     (assoc query :cache-ttl ttl)))
 
+(defn get-card-name
+  "Return card name of card"
+  [{card-name :name, :as card}]
+  card-name)
+
 (defn run-query-for-card-async
   "Run the query for Card with `parameters` and `constraints`, and return results in a `StreamingResponse` that should
   be returned as the result of an API endpoint fn. Will throw an Exception if preconditions (such as read perms) are
@@ -606,8 +611,8 @@
              context     :question
              ;; param `run` can be used to control how the query is ran, e.g. if you need to
              ;; customize the `context` passed to the QP
-             run         (^:once fn* [query info]
-                          (qp.streaming/streaming-response [context export-format]
+             run         (^:once fn* [query info card-name]
+                          (qp.streaming/streaming-response [context export-format card-name]
                             (qp/process-query-and-save-execution! query info context)))}}]
   {:pre [(u/maybe? sequential? parameters)]}
   (let [card  (api/read-check (Card card-id))
@@ -618,7 +623,7 @@
                :card-id      card-id
                :dashboard-id dashboard-id}]
     (api/check-not-archived card)
-    (run query info)))
+    (run query info (get-card-name card))))
 
 (api/defendpoint ^:streaming POST "/:card-id/query"
   "Run the query associated with a Card."

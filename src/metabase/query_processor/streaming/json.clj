@@ -11,10 +11,10 @@
            java.nio.charset.StandardCharsets))
 
 (defmethod i/stream-options :json
-  [_]
+  [_ ^java.lang.String card-name]
   {:content-type "application/json; charset=utf-8"
-   :headers      {"Content-Disposition" (format "attachment; filename=\"query_result_%s.json\""
-                                                (u.date/format (t/zoned-date-time)))}})
+   :headers      {"Content-Disposition" (format "attachment; filename=\"%s_%s.json\""
+                                                card-name (u.date/format (t/zoned-date-time)))}})
 
 (defmethod i/streaming-results-writer :json
   [_ ^OutputStream os]
@@ -39,7 +39,7 @@
         (.close writer)))))
 
 (defmethod i/stream-options :api
-  [stream-type]
+  [stream-type ^java.lang.String card-name]
   {:content-type "application/json; charset=utf-8"})
 
 (defn- map->serialized-json-kvs

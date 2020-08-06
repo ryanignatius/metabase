@@ -50,7 +50,7 @@
                         :context     :ad-hoc
                         :card-id     source-card-id
                         :nested?     (boolean source-card-id)}]
-    (qp.streaming/streaming-response [context :api]
+    (qp.streaming/streaming-response [context :api "result"]
       (qp/process-query-and-save-with-max-results-constraints! query info context))))
 
 
@@ -90,7 +90,7 @@
                                              (assoc :skip-results-metadata? true
                                                     :format-rows? false))))
           info  {:executed-by api/*current-user-id*, :context (export-format->context export-format)}]
-      (qp.streaming/streaming-response [context export-format]
+      (qp.streaming/streaming-response [context export-format "result"]
         (qp/process-query-and-save-execution! query info context)))))
 
 
