@@ -64,6 +64,7 @@
     :exclusions [commons-codec
                  commons-io
                  slingshot]]
+   [clj-pdf "2.4.0"]                                                  ; for pdf generation / export
    [clojure.java-time "0.3.2"]                                        ; Java 8 java.time wrapper
    [clojurewerkz/quartzite "2.1.0"                                    ; scheduling library
     :exclusions [c3p0]]

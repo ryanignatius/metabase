@@ -6,6 +6,7 @@
              [csv :as streaming.csv]
              [interface :as i]
              [json :as streaming.json]
+             [pdf :as streaming.pdf]
              [xlsx :as streaming.xlsx]]
             [metabase.util :as u])
   (:import clojure.core.async.impl.channels.ManyToManyChannel
@@ -16,6 +17,7 @@
 ;; TODO - consider whether we should lazy-load these!
 (comment streaming.csv/keep-me
          streaming.json/keep-me
+         streaming.pdf/keep-me
          streaming.xlsx/keep-me)
 
 (defn- streaming-rff [results-writer]

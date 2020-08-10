@@ -996,6 +996,7 @@
           :json-download
           :map-tiles
           :metabot
+          :pdf-download
           :public-dashboard
           :public-question
           :pulse
