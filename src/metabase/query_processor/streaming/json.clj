@@ -14,7 +14,7 @@
   [_ ^java.lang.String card-name]
   {:content-type "application/json; charset=utf-8"
    :headers      {"Content-Disposition" (format "attachment; filename=\"%s_%s.json\""
-                                                card-name (u.date/format (t/zoned-date-time)))}})
+                                                card-name (u.date/format-date (t/zoned-date-time)))}})
 
 (defmethod i/streaming-results-writer :json
   [_ ^OutputStream os]

@@ -17,7 +17,7 @@
   {:content-type              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
    :write-keepalive-newlines? false
    :headers                   {"Content-Disposition" (format "attachment; filename=\"%s_%s.xlsx\""
-                                                             card-name (u.date/format (t/zoned-date-time)))}})
+                                                             card-name (u.date/format-date (t/zoned-date-time)))}})
 
 ;; add a generic implementation for the method that writes values to XLSX cells that just piggybacks off the
 ;; implementations we've already defined for encoding things as JSON. These implementations live in

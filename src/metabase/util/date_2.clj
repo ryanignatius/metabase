@@ -69,6 +69,12 @@
   (when t
     (format* (temporal->iso-8601-formatter t) t)))
 
+(defn format-date
+  "Format temporal value `t` as a YYYY-MM-DD."
+  ^String [t]
+  ;; remove all after the `T`. Easy!
+  (subs (format t) 0 10))
+
 (defn format-sql
   "Format a temporal value `t` as a SQL-style literal string (for most SQL databases). This is the same as ISO-8601 but
   uses a space rather than of a `T` to separate the date and time components."

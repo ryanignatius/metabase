@@ -15,7 +15,7 @@
   {:content-type              "application/pdf"
    :write-keepalive-newlines? false
    :headers                   {"Content-Disposition" (format "attachment; filename=\"%s_%s.pdf\""
-                                                             card-name (u.date/format (t/zoned-date-time)))}})
+                                                             card-name (u.date/format-date (t/zoned-date-time)))}})
 
 (defn- add-header
   "Helper method to write the header"

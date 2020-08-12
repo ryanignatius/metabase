@@ -12,7 +12,7 @@
   [_ ^java.lang.String card-name]
   {:content-type              "text/csv"
    :headers                   {"Content-Disposition" (format "attachment; filename=\"%s_%s.csv\""
-                                                             card-name (u.date/format (t/zoned-date-time)))}
+                                                             card-name (u.date/format-date (t/zoned-date-time)))}
    :write-keepalive-newlines? false})
 
 (defmethod i/streaming-results-writer :csv
