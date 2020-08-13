@@ -28,7 +28,7 @@
       }
       nil
     ]
-    [(mapv (fn [name] [:pdf-cell {:align :center :valign :middle :height 25 :font {:style :bold }} name]) columns)]
+    [(mapv (fn [name] [:pdf-cell {:align :center :valign :middle :padding-bottom 10 :font {:style :bold }} name]) columns)]
   ))
 
 (defn- add-row
@@ -42,7 +42,7 @@
       }
       nil
     ]
-    [(mapv (fn [element] [:pdf-cell (str element) ]) row )]
+    [(mapv (fn [element] [:pdf-cell {:padding-bottom 10} (str element) ]) row )]
   ))
 
 (defn- export-to-pdf
@@ -58,11 +58,6 @@
      :font {
         :size 9
         :family :sans-serif}}
-    ; write the title
-    [:heading {:align :center} "Results"]
-    [:spacer 1]
-
-    ; write the contents
     rows]
     os)
   )
